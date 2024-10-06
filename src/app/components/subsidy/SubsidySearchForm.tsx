@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Search } from 'lucide-react';
+import { Search, Star, Send } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -59,7 +59,9 @@ interface SubsidySearchFormProps {
   onSearch: (params: SubsidySearchParams) => Promise<void>;
 }
 
+
 const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ onSearch }) => {
+  const [isStarred, setIsStarred] = useState(false);
   const [keyword, setKeyword] = useState('');
   const [sort, setSort] = useState('created_date');
   const [order, setOrder] = useState('DESC');
@@ -192,14 +194,11 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ onSearch }) => {
 
   return (
     <>
-      <div className="bg-gray-900 text-white p-6 w-full">
-        <h2 className={`text-4xl font-bold mb-6 text-center transition-all duration-500 ${animateTitle ? 'scale-110 text-yellow-300' : 'scale-100 text-white'}`}>
-          🌟 補助金検索 🌟
-        </h2>
-        
+      <div className="bg-white text-gray-800 p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
+        <h2 className="text-3xl font-bold mb-6 text-center text-gray-900">補助金検索</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="keyword" className="text-xl">キーワード*</Label>
+            <Label htmlFor="keyword" className="text-xl text-gray-700">キーワード*</Label>
             <Input
               id="keyword"
               value={keyword}
@@ -208,18 +207,18 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ onSearch }) => {
               required
               minLength={2}
               maxLength={255}
-              className="bg-white/20 text-white placeholder-white/50"
+              className="bg-gray-100 text-gray-800 placeholder-gray-500"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="sort" className="text-xl">ソート項目*</Label>
+              <Label htmlFor="sort" className="text-xl text-gray-700">ソート項目*</Label>
               <Select value={sort} onValueChange={setSort}>
-                <SelectTrigger id="sort" className="bg-white/20 text-white">
+                <SelectTrigger id="sort" className="bg-gray-100 text-gray-800">
                   <SelectValue placeholder="ソート項目を選択" />
                 </SelectTrigger>
-                <SelectContent className="bg-gray-800 text-white">
+                <SelectContent className="bg-white text-gray-800">
                   <SelectItem value="created_date">作成日時</SelectItem>
                   <SelectItem value="acceptance_start_datetime">募集開始日時</SelectItem>
                   <SelectItem value="acceptance_end_datetime">募集終了日時</SelectItem>
@@ -227,12 +226,12 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ onSearch }) => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="order" className="text-xl">ソート順*</Label>
+              <Label htmlFor="order" className="text-xl text-gray-700">ソート順*</Label>
               <Select value={order} onValueChange={setOrder}>
-                <SelectTrigger id="order" className="bg-white/20 text-white">
+                <SelectTrigger id="order" className="bg-gray-100 text-gray-800">
                   <SelectValue placeholder="ソート順を選択" />
                 </SelectTrigger>
-                <SelectContent className="bg-gray-800 text-white">
+                <SelectContent className="bg-white text-gray-800">
                   <SelectItem value="DESC">降順</SelectItem>
                   <SelectItem value="ASC">昇順</SelectItem>
                 </SelectContent>
@@ -241,12 +240,12 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ onSearch }) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="acceptance" className="text-xl">募集期間内絞込み*</Label>
+            <Label htmlFor="acceptance" className="text-xl text-gray-700">募集期間内絞込み*</Label>
             <Select value={acceptance} onValueChange={setAcceptance}>
-              <SelectTrigger id="acceptance" className="bg-white/20 text-white">
+              <SelectTrigger id="acceptance" className="bg-gray-100 text-gray-800">
                 <SelectValue placeholder="絞込みを選択" />
               </SelectTrigger>
-              <SelectContent className="bg-gray-800 text-white">
+              <SelectContent className="bg-white text-gray-800">
                 <SelectItem value="1">要</SelectItem>
                 <SelectItem value="0">否</SelectItem>
               </SelectContent>
@@ -254,7 +253,7 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ onSearch }) => {
           </div>
 
           <div className="space-y-2">
-            <Label className="text-xl">利用目的</Label>
+            <Label className="text-xl text-gray-700">利用目的</Label>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
               {usePurposeOptions.map((purpose) => (
                 <div key={purpose} className="flex items-center space-x-2">
@@ -268,21 +267,21 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ onSearch }) => {
                         setUsePurpose(usePurpose.filter(p => p !== purpose));
                       }
                     }}
-                    className="border-gray-600"
+                    className="border-gray-400"
                   />
-                  <Label htmlFor={`purpose-${purpose}`} className="text-sm">{purpose}</Label>
+                  <Label htmlFor={`purpose-${purpose}`} className="text-sm text-gray-700">{purpose}</Label>
                 </div>
               ))}
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="target_number_of_employees" className="text-xl">従業員数</Label>
+            <Label htmlFor="target_number_of_employees" className="text-xl text-gray-700">従業員数</Label>
             <Select value={targetNumberOfEmployees} onValueChange={setTargetNumberOfEmployees}>
-              <SelectTrigger id="target_number_of_employees" className="bg-white/20 text-white">
+              <SelectTrigger id="target_number_of_employees" className="bg-gray-100 text-gray-800">
                 <SelectValue placeholder="従業員数を選択" />
               </SelectTrigger>
-              <SelectContent className="bg-gray-800 text-white">
+              <SelectContent className="bg-white text-gray-800">
                 <SelectItem value="従業員の制約なし">制約なし</SelectItem>
                 <SelectItem value="5名以下">5名以下</SelectItem>
                 <SelectItem value="20名以下">20名以下</SelectItem>
@@ -296,12 +295,12 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ onSearch }) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="target_area_search" className="text-xl">補助対象地域</Label>
+            <Label htmlFor="target_area_search" className="text-xl text-gray-700">補助対象地域</Label>
             <Select value={targetAreaSearch} onValueChange={setTargetAreaSearch}>
-              <SelectTrigger id="target_area_search" className="bg-white/20 text-white">
+              <SelectTrigger id="target_area_search" className="bg-gray-100 text-gray-800">
                 <SelectValue placeholder="地域を選択" />
               </SelectTrigger>
-              <SelectContent className="bg-gray-800 text-white">
+              <SelectContent className="bg-white text-gray-800">
                 <SelectItem value="全国">全国</SelectItem>
                 <SelectItem value="北海道地方">北海道地方</SelectItem>
                 <SelectItem value="東北地方">東北地方</SelectItem>
@@ -320,7 +319,7 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ onSearch }) => {
 
           <Button 
             type="submit" 
-            className="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-3 px-6 rounded-full transform transition duration-200 hover:scale-105" 
+            className="w-full bg-blue-500 hover:bg-blue-400 text-white font-bold py-3 px-6 rounded-full transform transition duration-200 hover:scale-105" 
             disabled={isLoading}
           >
             {isLoading ? '検索中...' : <><Search className="mr-2 h-6 w-6" /> 補助金を探す</>}
@@ -330,10 +329,10 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ onSearch }) => {
 
       {/* 検索結果モーダル */}
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="bg-gray-800 text-white max-w-4xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="bg-white text-gray-800 max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-center">🎉 補助金発見！ 🎉</DialogTitle>
-            <DialogDescription className="text-center text-gray-400">
+            <DialogTitle className="text-2xl font-bold text-center text-gray-900">🎉 補助金発見！ 🎉</DialogTitle>
+            <DialogDescription className="text-center text-gray-600">
               あなたにピッタリの補助金が見つかりました！
             </DialogDescription>
           </DialogHeader>
@@ -342,14 +341,14 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ onSearch }) => {
               {searchResults.map((subsidy, index) => (
                 <li 
                   key={subsidy.id} 
-                  className="border-2 border-yellow-400 p-4 rounded-md bg-gray-700 transition-all duration-300 hover:scale-105"
+                  className="border-2 border-blue-400 p-4 rounded-md bg-gray-50 transition-all duration-300 hover:scale-105"
                   style={{animationDelay: `${index * 0.1}s`}}
                 >
-                  <h4 className="font-bold text-xl text-yellow-400">{subsidy.title}</h4>
-                  <p className="text-gray-400 mt-2">対象地域: {subsidy.target_area_search}</p>
-                  <p className="text-gray-400">補助金上限: {subsidy.subsidy_max_limit ? subsidy.subsidy_max_limit.toLocaleString() : '情報なし'}円</p>
-                  <p className="text-gray-400">募集期間: {new Date(subsidy.acceptance_start_datetime).toLocaleDateString()} ～ {new Date(subsidy.acceptance_end_datetime).toLocaleDateString()}</p>
-                  <p className="text-gray-400">従業員数: {subsidy.target_number_of_employees}</p>
+                  <h4 className="font-bold text-xl text-blue-600">{subsidy.title}</h4>
+                  <p className="text-gray-600 mt-2">対象地域: {subsidy.target_area_search}</p>
+                  <p className="text-gray-600">補助金上限: {subsidy.subsidy_max_limit ? subsidy.subsidy_max_limit.toLocaleString() : '情報なし'}円</p>
+                  <p className="text-gray-600">募集期間: {new Date(subsidy.acceptance_start_datetime).toLocaleDateString()} ～ {new Date(subsidy.acceptance_end_datetime).toLocaleDateString()}</p>
+                  <p className="text-gray-600">従業員数: {subsidy.target_number_of_employees}</p>
                   <div className="mt-4 flex justify-end">
                     <Button 
                       onClick={() => handleViewDetails(subsidy.id)}
@@ -362,10 +361,10 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ onSearch }) => {
               ))}
             </ul>
           ) : (
-            <p className="text-center text-xl mt-4 text-gray-400">検索結果がありません。別の条件で試してみてください！</p>
+            <p className="text-center text-xl mt-4 text-gray-600">検索結果がありません。別の条件で試してみてください！</p>
           )}
           <div className="mt-6 flex justify-center">
-            <Button onClick={() => setShowModal(false)} className="bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 px-4 rounded-full">
+            <Button onClick={() => setShowModal(false)} className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full">
               閉じる
             </Button>
           </div>
@@ -374,185 +373,205 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ onSearch }) => {
 
       {/* 詳細モーダル */}
       <Dialog open={detailModalOpen} onOpenChange={setDetailModalOpen}>
-  <DialogContent className="bg-gray-900 text-white max-w-4xl max-h-[80vh] overflow-y-auto">
-    <DialogHeader>
-      <DialogTitle className="text-2xl font-bold text-center">🔍 補助金詳細 🔍</DialogTitle>
-      <DialogDescription className="text-center text-gray-400">
+        <DialogContent className="bg-white text-gray-800 max-w-4xl max-h-[80vh] overflow-y-auto hide-close-button">
+          <DialogHeader className="sticky top-0 bg-white z-10 pb-4 border-b">
+            <div className="flex justify-between items-center">
+              <DialogTitle className="text-2xl font-bold text-gray-900">🔍 補助金詳細 🔍</DialogTitle>
+        <button
+          onClick={() => setIsStarred(!isStarred)}
+          className={`text-2xl ${isStarred ? 'text-yellow-400' : 'text-gray-400'}`}
+        >
+          <Star className={`h-8 w-8 ${isStarred ? 'fill-current' : ''}`} />
+        </button>
+      </div>
+      <DialogDescription className="text-center text-gray-600">
         選択された補助金の詳細情報です。
       </DialogDescription>
     </DialogHeader>
-    {isDetailLoading ? (
-      <p className="text-center">読み込み中...</p>
-    ) : detailError ? (
-      <p className="text-center text-red-500">{detailError}</p>
-    ) : selectedSubsidyDetail ? (
-      <div className="space-y-4 mt-4">
-        <h3 className="text-2xl font-semibold text-yellow-400">{selectedSubsidyDetail.title}</h3>
-        
-        <div className="bg-gray-800 p-4 rounded-lg">
-          <p className="text-lg font-medium text-green-400">キャッチコピー</p>
-          <p>{selectedSubsidyDetail.subsidy_catch_phrase}</p>
-        </div>
-        
-        <div className="bg-gray-800 p-4 rounded-lg">
-          <p className="text-lg font-medium text-green-400">概要</p>
-          <div dangerouslySetInnerHTML={{ __html: selectedSubsidyDetail.detail }} className="prose prose-invert max-w-none" />
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-gray-800 p-4 rounded-lg">
-            <p className="text-lg font-medium text-green-400">利用目的</p>
-            <p>{Array.isArray(selectedSubsidyDetail.use_purpose) ? selectedSubsidyDetail.use_purpose.join(', ') : selectedSubsidyDetail.use_purpose}</p>
-          </div>
-          
-          <div className="bg-gray-800 p-4 rounded-lg">
-            <p className="text-lg font-medium text-green-400">対象業種</p>
-            <p>{selectedSubsidyDetail.industry}</p>
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-gray-800 p-4 rounded-lg">
-            <p className="text-lg font-medium text-green-400">補助対象地域</p>
-            <p>{selectedSubsidyDetail.target_area_search}</p>
-          </div>
-          
-          <div className="bg-gray-800 p-4 rounded-lg">
-            <p className="text-lg font-medium text-green-400">補助対象地域詳細</p>
-            <p>{selectedSubsidyDetail.target_area_detail || '詳細情報なし'}</p>
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-gray-800 p-4 rounded-lg">
-            <p className="text-lg font-medium text-green-400">従業員数</p>
-            <p>{selectedSubsidyDetail.target_number_of_employees}</p>
-          </div>
-          
-          <div className="bg-gray-800 p-4 rounded-lg">
-            <p className="text-lg font-medium text-green-400">補助率</p>
-            <p>{selectedSubsidyDetail.subsidy_rate}</p>
-          </div>
-        </div>
-        
-        <div className="bg-gray-800 p-4 rounded-lg">
-          <p className="text-lg font-medium text-green-400">補助金上限</p>
-          <p>{selectedSubsidyDetail.subsidy_max_limit.toLocaleString()}円</p>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-gray-800 p-4 rounded-lg">
-            <p className="text-lg font-medium text-green-400">募集開始</p>
-            <p>{new Date(selectedSubsidyDetail.acceptance_start_datetime).toLocaleString()}</p>
-          </div>
-          
-          <div className="bg-gray-800 p-4 rounded-lg">
-            <p className="text-lg font-medium text-green-400">募集終了</p>
-            <p>{new Date(selectedSubsidyDetail.acceptance_end_datetime).toLocaleString()}</p>
-          </div>
-          
-          <div className="bg-gray-800 p-4 rounded-lg">
-            <p className="text-lg font-medium text-green-400">事業終了期限</p>
-            <p>{new Date(selectedSubsidyDetail.project_end_deadline).toLocaleString()}</p>
-          </div>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-gray-800 p-4 rounded-lg">
-            <p className="text-lg font-medium text-green-400">申請受付状況</p>
-            <p>{selectedSubsidyDetail.request_reception_presence}</p>
-          </div>
-          
-          <div className="bg-gray-800 p-4 rounded-lg">
-            <p className="text-lg font-medium text-green-400">複数回申請</p>
-            <p>{selectedSubsidyDetail.is_enable_multiple_request ? '可能' : '不可'}</p>
-          </div>
-        </div>
-        
-        <div className="bg-gray-800 p-4 rounded-lg">
-          <p className="text-lg font-medium text-green-400">詳細ページURL</p>
-          <a 
-            href={selectedSubsidyDetail.front_subsidy_detail_page_url} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="text-blue-400 hover:underline"
-          >
-            {selectedSubsidyDetail.front_subsidy_detail_page_url}
-          </a>
-        </div>
-        
-        {/* 申請ガイドライン */}
-        <div className="bg-gray-800 p-4 rounded-lg">
-          <p className="text-lg font-medium text-green-400 mb-2">申請ガイドライン</p>
-          {selectedSubsidyDetail.application_guidelines && selectedSubsidyDetail.application_guidelines.length > 0 ? (
-            <ul className="list-disc list-inside">
-              {selectedSubsidyDetail.application_guidelines.map((guideline, index) => (
-                <li key={index}>
-                  <a 
-                    href={`data:application/pdf;base64,${guideline.data}`} 
-                    download={guideline.name}
-                    className="text-blue-400 hover:underline"
-                  >
-                    {guideline.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
+          {isDetailLoading ? (
+            <p className="text-center">読み込み中...</p>
+          ) : detailError ? (
+            <p className="text-center text-red-500">{detailError}</p>
+          ) : selectedSubsidyDetail ? (
+            <div className="space-y-4 mt-4">
+              <h3 className="text-2xl font-semibold text-blue-600">{selectedSubsidyDetail.title}</h3>
+              
+              <div className="bg-gray-100 p-4 rounded-lg">
+                <p className="text-lg font-medium text-green-600">キャッチコピー</p>
+                <p>{selectedSubsidyDetail.subsidy_catch_phrase}</p>
+              </div>
+              
+              <div className="bg-gray-100 p-4 rounded-lg">
+                <p className="text-lg font-medium text-green-600">概要</p>
+                <div 
+                  dangerouslySetInnerHTML={{ __html: selectedSubsidyDetail.detail }} 
+                  className="prose max-w-none"
+                />
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-gray-100 p-4 rounded-lg">
+                  <p className="text-lg font-medium text-green-600">利用目的</p>
+                  <p>{Array.isArray(selectedSubsidyDetail.use_purpose) ? selectedSubsidyDetail.use_purpose.join(', ') : selectedSubsidyDetail.use_purpose}</p>
+                </div>
+                
+                <div className="bg-gray-100 p-4 rounded-lg">
+                  <p className="text-lg font-medium text-green-600">対象業種</p>
+                  <p>{selectedSubsidyDetail.industry}</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-gray-100 p-4 rounded-lg">
+                  <p className="text-lg font-medium text-green-600">補助対象地域</p>
+                  <p>{selectedSubsidyDetail.target_area_search}</p>
+                </div>
+                
+                <div className="bg-gray-100 p-4 rounded-lg">
+                  <p className="text-lg font-medium text-green-600">補助対象地域詳細</p>
+                  <p>{selectedSubsidyDetail.target_area_detail || '詳細情報なし'}</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-gray-100 p-4 rounded-lg">
+                  <p className="text-lg font-medium text-green-600">従業員数</p>
+                  <p>{selectedSubsidyDetail.target_number_of_employees}</p>
+                </div>
+                
+                <div className="bg-gray-100 p-4 rounded-lg">
+                  <p className="text-lg font-medium text-green-600">補助率</p>
+                  <p>{selectedSubsidyDetail.subsidy_rate}</p>
+                </div>
+              </div>
+              
+              <div className="bg-gray-100 p-4 rounded-lg">
+                <p className="text-lg font-medium text-green-600">補助金上限</p>
+                <p>{selectedSubsidyDetail.subsidy_max_limit.toLocaleString()}円</p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-gray-100 p-4 rounded-lg">
+                  <p className="text-lg font-medium text-green-600">募集開始</p>
+                  <p>{new Date(selectedSubsidyDetail.acceptance_start_datetime).toLocaleString()}</p>
+                </div>
+                
+                <div className="bg-gray-100 p-4 rounded-lg">
+                  <p className="text-lg font-medium text-green-600">募集終了</p>
+                  <p>{new Date(selectedSubsidyDetail.acceptance_end_datetime).toLocaleString()}</p>
+                </div>
+                
+                <div className="bg-gray-100 p-4 rounded-lg">
+                  <p className="text-lg font-medium text-green-600">事業終了期限</p>
+                  <p>{new Date(selectedSubsidyDetail.project_end_deadline).toLocaleString()}</p>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-gray-100 p-4 rounded-lg">
+                  <p className="text-lg font-medium text-green-600">申請受付状況</p>
+                  <p>{selectedSubsidyDetail.request_reception_presence}</p>
+                </div>
+                
+                <div className="bg-gray-100 p-4 rounded-lg">
+                  <p className="text-lg font-medium text-green-600">複数回申請</p>
+                  <p>{selectedSubsidyDetail.is_enable_multiple_request ? '可能' : '不可'}</p>
+                </div>
+              </div>
+              
+              <div className="bg-gray-100 p-4 rounded-lg">
+                <p className="text-lg font-medium text-green-600">詳細ページURL</p>
+                <a 
+                  href={selectedSubsidyDetail.front_subsidy_detail_page_url} 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-blue-600 hover:underline"
+                >
+                  {selectedSubsidyDetail.front_subsidy_detail_page_url}
+                </a>
+              </div>
+              
+              {/* 申請ガイドライン */}
+              <div className="bg-gray-100 p-4 rounded-lg">
+                <p className="text-lg font-medium text-green-600 mb-2">申請ガイドライン</p>
+                {selectedSubsidyDetail.application_guidelines && selectedSubsidyDetail.application_guidelines.length > 0 ? (
+                  <ul className="list-disc list-inside">
+                    {selectedSubsidyDetail.application_guidelines.map((guideline, index) => (
+                      <li key={index}>
+                        <a 
+                          href={`data:application/pdf;base64,${guideline.data}`} 
+                          download={guideline.name}
+                          className="text-blue-600 hover:underline"
+                        >
+                          {guideline.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>申請ガイドラインはありません</p>
+                )}
+              </div>
+              
+              {/* 補助金概要 */}
+              <div className="bg-gray-100 p-4 rounded-lg">
+                <p className="text-lg font-medium text-green-600 mb-2">補助金概要</p>
+                {selectedSubsidyDetail.outline_of_grant && selectedSubsidyDetail.outline_of_grant.length > 0 ? (
+                  <ul className="list-disc list-inside">
+                    {selectedSubsidyDetail.outline_of_grant.map((outline, index) => (
+                      <li key={index}>
+                        <a 
+                          href={`data:application/pdf;base64,${outline.data}`} 
+                          download={outline.name}
+                          className="text-blue-600 hover:underline"
+                        >
+                          {outline.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>補助金概要はありません</p>
+                )}
+              </div>
+              
+              {/* 申請様式 */}
+              <div className="bg-gray-100 p-4 rounded-lg">
+                <p className="text-lg font-medium text-green-600 mb-2">申請様式</p>
+                {selectedSubsidyDetail.application_form && selectedSubsidyDetail.application_form.length > 0 ? (
+                  <ul className="list-disc list-inside">
+                    {selectedSubsidyDetail.application_form.map((form, index) => (
+                      <li key={index}>
+                        <a 
+                          href={`data:application/pdf;base64,${form.data}`} 
+                          download={form.name}
+                          className="text-blue-600 hover:underline"
+                        >
+                          {form.name}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p>申請様式はありません</p>
+                )}
+              </div>
+            </div>
           ) : (
-            <p>申請ガイドラインはありません</p>
+            <p className="text-center text-gray-600">詳細情報がありません。</p>
           )}
-        </div>
-        
-        {/* 補助金概要 */}
-        <div className="bg-gray-800 p-4 rounded-lg">
-          <p className="text-lg font-medium text-green-400 mb-2">補助金概要</p>
-          {selectedSubsidyDetail.outline_of_grant && selectedSubsidyDetail.outline_of_grant.length > 0 ? (
-            <ul className="list-disc list-inside">
-              {selectedSubsidyDetail.outline_of_grant.map((outline, index) => (
-                <li key={index}>
-                  <a 
-                    href={`data:application/pdf;base64,${outline.data}`} 
-                    download={outline.name}
-                    className="text-blue-400 hover:underline"
-                  >
-                    {outline.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>補助金概要はありません</p>
-          )}
-        </div>
-        
-        {/* 申請様式 */}
-        <div className="bg-gray-800 p-4 rounded-lg">
-          <p className="text-lg font-medium text-green-400 mb-2">申請様式</p>
-          {selectedSubsidyDetail.application_form && selectedSubsidyDetail.application_form.length > 0 ? (
-            <ul className="list-disc list-inside">
-              {selectedSubsidyDetail.application_form.map((form, index) => (
-                <li key={index}>
-                  <a 
-                    href={`data:application/pdf;base64,${form.data}`} 
-                    download={form.name}
-                    className="text-blue-400 hover:underline"
-                  >
-                    {form.name}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>申請様式はありません</p>
-          )}
-        </div>
-      </div>
-    ) : (
-      <p className="text-center text-gray-400">詳細情報がありません。</p>
-    )}
-    <div className="mt-6 flex justify-center">
-      <Button onClick={() => setDetailModalOpen(false)} className="bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-2 px-4 rounded-full">
+          <div className="mt-6 flex justify-center">
+            <Button onClick={() => setDetailModalOpen(false)} className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full">
+              閉じる
+            </Button>
+          </div>
+          <div className="mt-6 flex justify-between items-center sticky bottom-0 bg-white z-10 pt-4 border-t">
+      <Button onClick={() => setDetailModalOpen(false)} className="bg-gray-500 hover:bg-gray-400 text-white font-bold py-2 px-4 rounded-full">
         閉じる
+      </Button>
+      <Button onClick={() => {/* 申請代行処理 */}} className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full flex items-center">
+        <Send className="mr-2 h-5 w-5" />
+        申請代行を依頼
       </Button>
     </div>
   </DialogContent>

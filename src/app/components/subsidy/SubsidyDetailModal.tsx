@@ -1,5 +1,5 @@
 import React from 'react';
-import { SubsidyDetail } from '@/utils/api-client';
+import { SubsidyDetail } from '@/utils/types';
 import {
   Dialog,
   DialogContent,

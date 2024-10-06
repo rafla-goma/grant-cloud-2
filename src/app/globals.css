@@ -26,3 +26,7 @@ body {
   }
 }
 
+.hide-close-button [aria-label="Close"],
+.hide-close-button button[type="button"]:has(svg) {
+  display: none !important;
+}
