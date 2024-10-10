@@ -31,8 +31,8 @@ const SubsidyList: React.FC<SubsidyListProps> = ({ subsidies }) => {
       {subsidies.map((subsidy) => (
         <div key={subsidy.id} className="bg-gray-700 p-4 rounded-lg shadow-lg border border-yellow-500">
           <h3 className="text-xl font-bold text-white mb-2">{subsidy.subsidy_name}</h3>
-          <p className="text-gray-300 mb-2">対象地域: {subsidy.target_area}</p>
-          <p className="text-gray-300 mb-2">補助金上限: {subsidy.subsidy_max_limit?.toLocaleString() ?? '未定義'}円</p>
+          <p className="text-gray-300 mb-2">対象地域: {subsidy.target_area_search}</p>
+          <p className="text-gray-300 mb-2">補助金上限: {subsidy.subsidy_max_limit ? `${subsidy.subsidy_max_limit.toLocaleString()}円` : '未定義'}</p>
           <p className="text-gray-300 mb-2">募集期間: {subsidy.acceptance_start_datetime ? new Date(subsidy.acceptance_start_datetime).toLocaleDateString() : '未定義'} ～ {subsidy.acceptance_end_datetime ? new Date(subsidy.acceptance_end_datetime).toLocaleDateString() : '未定義'}</p>
           <p className="text-gray-300 mb-4">従業員数: {subsidy.target_number_of_employees}</p>
           <button

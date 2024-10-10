@@ -67,7 +67,7 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ _onSearch }) => {
   const [acceptance, setAcceptance] = useState('1');
   const [usePurpose, setUsePurpose] = useState<string[]>([]);
   const [targetNumberOfEmployees, setTargetNumberOfEmployees] = useState('');
-  const [targetAreaSearch, setTargetAreaSearch] = useState('');
+  const [targetAreaSearch, setTargetAreaSearch] = useState<string | null>(null);
   const [searchResults, setSearchResults] = useState<SubsidyInfo[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [_error, setError] = useState<string | null>(null);
@@ -102,7 +102,7 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ _onSearch }) => {
       use_purpose: formattedUsePurpose,
       industry: '製造業', // 固定値
       target_number_of_employees: targetNumberOfEmployees,
-      target_area_search: targetAreaSearch
+      ...(targetAreaSearch && targetAreaSearch !== '指定なし' ? { target_area_search: targetAreaSearch } : {}),
     });
 
     try {
@@ -300,11 +300,12 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ _onSearch }) => {
 
             <div className="space-y-2">
               <Label htmlFor="target_area_search" className="text-xl text-gray-700">補助対象地域</Label>
-              <Select value={targetAreaSearch} onValueChange={setTargetAreaSearch}>
+              <Select value={targetAreaSearch || ''} onValueChange={setTargetAreaSearch}>
                 <SelectTrigger id="target_area_search" className="bg-gray-100 text-gray-800">
                   <SelectValue placeholder="地域を選択" />
                 </SelectTrigger>
                 <SelectContent className="bg-white text-gray-800">
+                  <SelectItem value="指定なし">指定なし</SelectItem>
                   <SelectItem value="全国">全国</SelectItem>
                   <SelectItem value="北海道地方">北海道地方</SelectItem>
                   <SelectItem value="東北地方">東北地方</SelectItem>
@@ -351,7 +352,7 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ _onSearch }) => {
                 >
                   <h4 className="font-bold text-xl text-blue-600">{subsidy.title}</h4>
                   <p className="text-gray-600 mt-2">対象地域: {subsidy.target_area_search}</p>
-                  <p className="text-gray-600">補助金上限: {subsidy.subsidy_max_limit ? subsidy.subsidy_max_limit.toLocaleString() : '情報なし'}円</p>
+                  <p className="text-gray-600">補助金上限: {subsidy.subsidy_max_limit ? `${subsidy.subsidy_max_limit.toLocaleString()}円` : '情報なし'}</p>
                   <p className="text-gray-600">募集期間: {new Date(subsidy.acceptance_start_datetime).toLocaleDateString()} ～ {new Date(subsidy.acceptance_end_datetime).toLocaleDateString()}</p>
                   <p className="text-gray-600">従業員数: {subsidy.target_number_of_employees}</p>
                   <div className="mt-4 flex justify-end">
