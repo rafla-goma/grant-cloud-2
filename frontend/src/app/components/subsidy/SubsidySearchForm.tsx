@@ -122,7 +122,7 @@ const SubsidySearchForm: React.FC<SubsidySearchFormProps> = ({ _onSearch }) => {
       setSearchResults(data.result);
       setShowModal(true);
     } catch (err) {
-      setError('検索中にエラーが発生しました。もう一度お試しください');
+      setError('検索中にエラーが発生しました。もう一度お試しください。');
       console.error('Search failed:', err);
     } finally {
       setIsLoading(false);
